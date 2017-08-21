@@ -734,6 +734,7 @@ public:
      * \brief Print status messages for Debug
      */
     static void StatusMessage(const char *msg);
+
 };
 
 

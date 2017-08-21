@@ -5,6 +5,7 @@
  */
 #pragma once
 #include "SimulationModule.h"
+#include "MetadataInfo.h"
 
 using namespace std;
 
@@ -21,6 +22,25 @@ using namespace std;
  *
  */
 class ImplicitKinematicWave_OL : public SimulationModule {
+
+	
+public:
+	//the metadata information part (static on the class level)
+	static map<const string, VariableMetadata> parameterInfo;
+	static map<const string, VariableMetadata> inputsInfo;
+	static map<const string, VariableMetadata> outputsInfo;
+
+	//mapping from variable name to the pinter of variable (at the instance level)
+	// if the variable is a float value, float*
+	// if the variable is a float* pointer, the value of the map is float**
+	// void * pointer is casted to pinter of one specific type according to the type information stored in parameterInfo, inputsInfo and outputsInfo
+	// thua the void* pointer can be used to change the value of the variable
+	map<const string, void*> parameters;
+	map<const string, void*> inputs;
+	map<const string, void*> outputs;
+
+	static void PrepareMetaInfo();
+
 public:
     //! Constructor
     ImplicitKinematicWave_OL(void);

@@ -1,6 +1,50 @@
 #include "MetadataInfo.h"
 #include "text.h"
 
+
+VariableMetadata::VariableMetadata(){
+
+}
+VariableMetadata::VariableMetadata(dimensionTypes dimension, string units, string description){
+	this->Units = units;
+	this->Description = description;
+	this->Dimension = dimension;
+}
+
+Parameter::Parameter(){
+
+}
+
+Parameter::Parameter(string name, string units, string description, dimensionTypes dimension, string source){
+	this->Name = name;
+	this->Units = units;
+	this->Description = description;
+	this->Dimension = dimension;
+	this->Source = source;
+}
+
+InputVariable::InputVariable(){
+
+}
+
+InputVariable::InputVariable(string name, string units, string description, dimensionTypes dimension, string source){
+	this->Name = name;
+	this->Units = units;
+	this->Description = description;
+	this->Dimension = dimension;
+	this->Source = source;
+}
+
+OutputVariable::OutputVariable(){
+
+}
+OutputVariable::OutputVariable(string name, string units, string description, dimensionTypes dimension){
+	this->Name = name;
+	this->Units = units;
+	this->Description = description;
+	this->Dimension = dimension;
+}
+
 // private methods
 void MetadataInfo::OpenTag(string name, string attributes, int indent, string *sb) {
     int sz = (int) (sb->size() + (name.size() + attributes.size() + (indent * 3) + 3));
@@ -557,3 +601,5 @@ string MetadataInfo::GetXMLDocument() {
 
     return sb;
 }
+
+

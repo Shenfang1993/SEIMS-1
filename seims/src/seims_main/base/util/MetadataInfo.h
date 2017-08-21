@@ -7,9 +7,25 @@
 #pragma once
 
 #include "utilities.h"
+#include "text.h"
 #include "MetadataInfoConst.h"
 
 using namespace std;
+
+/*!
+* \ingroup Util
+* \class OutputVariable
+* \brief Output variable information class
+*/
+class VariableMetadata {
+public:
+	VariableMetadata();
+	VariableMetadata(dimensionTypes dimension, string units, string description);
+	dimensionTypes Dimension;    ///< Data dimension type	
+	string Units;                ///< Units
+	string Description;          ///< Description
+
+};
 
 /*!
  * \ingroup util
@@ -30,6 +46,8 @@ public:
  */
 class Parameter {
 public:
+	Parameter();
+	Parameter(string name, string units, string description, dimensionTypes dimension, string source = Source_ParameterDB);
     string Name;                 ///< Name
     string Units;                ///< Units
     string Description;          ///< Description
@@ -63,6 +81,8 @@ public:
  */
 class InputVariable {
 public:
+	InputVariable();
+	InputVariable(string name, string units, string description, dimensionTypes dimension, string source = Source_Module);
     string Name;                ///< Name
     string Units;               ///< Units
     string Description;         ///< Description
@@ -77,6 +97,8 @@ public:
  */
 class OutputVariable {
 public:
+	OutputVariable();
+	OutputVariable(string name, string units, string description, dimensionTypes dimension);
     string Name;                 ///< Name
     string Units;                ///< Units
     string Description;          ///< Description
@@ -222,4 +244,25 @@ public:
     ModelClass GetDependency(int index);
 
     string GetXMLDocument(void);
+
+	/*!
+	* \brief Add metadata about parameters, inputs and outputs of a SimulationModule to a XML class
+	*/
+	template<typename T>
+	static void AddModuleMetadata(MetadataInfo& mdi){
+		for (map<const string, VariableMetadata>::iterator iter = T::parameterInfo.begin(); iter != T::parameterInfo.end(); iter++){
+			mdi.AddParameter(iter->first, iter->second.Units, iter->second.Description, Source_ParameterDB, iter->second.Dimension);
+		}
+
+		for (map<const string, VariableMetadata>::iterator iter = T::inputsInfo.begin(); iter != T::inputsInfo.end(); iter++){
+			mdi.AddInput(iter->first, iter->second.Units, iter->second.Description, Source_Module, iter->second.Dimension);
+		}
+
+		for (map<const string, VariableMetadata>::iterator iter = T::outputsInfo.begin(); iter != T::outputsInfo.end(); iter++){
+			mdi.AddOutput(iter->first, iter->second.Units, iter->second.Description, iter->second.Dimension);
+		}
+	};
+
 };
+
+
